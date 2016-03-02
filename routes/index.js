@@ -35,6 +35,17 @@ module.exports = function(app) {
 		});
 	});
 
+	app.post('/api/comment', function (req, res) {
+		console.log(req.body);
+		Comment.findOne({
+			'_id': req.body.commentId
+		}, function (err, comment) {
+			if (err) res.send(err);
+			console.log(comment);
+			res.json(comment);
+		});
+	});
+
 	app.use('/*', function(req, res){
 	  res.sendfile(path.join(__dirname, 'public/index.html'));
 	});

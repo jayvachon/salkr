@@ -19,51 +19,62 @@
 				.otherwise({ redirectTo: '/' });
 		}]);
 
-	app.controller('InitialController', ['$scope', '$http', function($scope, $http) {
+	app.factory('commentNode', function () {
+		var commentNode = {};
+		return commentNode;
+	});
+
+	app.controller('InitialController', ['$scope', '$http', 'commentNode', function($scope, $http, commentNode) {
 		$http.get('/api/initialComment')
 			.success(function(data) {
 				$scope.comment = data;
+				commentNode.comment = data;
 			})
 			.error(function(err) {
 				console.log("error: " + err);
 			});
 	}]);
 
-	app.controller('MainController', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
+	app.controller('MainController', ['$scope', '$http', '$routeParams', 'commentNode', function($scope, $http, $routeParams, commentNode) {
 		$http.get('/api/comment/' + $routeParams.commentId)
 			.success(function(data) {
 				$scope.comment = data;
+				commentNode.comment = data;
 			})
 			.error(function(err) {
 				console.log("error: " + err);
 			});
 	}]);
 
-	app.directive('commentForm', function() {
+	app.directive('commentForm', ['$http', 'commentNode', function($http, commentNode) {
 		return {
 			restrict: 'E',
 			templateUrl: 'comment-form.html',
 			scope: { index: '=' },
-			controller: function($scope) {
+			controller: function($scope, commentNode) {
 
-				this.comment = {};
+				this.addChild = function() {
 
-				this.addComment = function() {
-					console.log($scope.index);
-					console.log(this.comment.text);
-					this.comment = {};
+					var commentForm = this;
+					commentForm.child.parent = commentNode.comment._id;
+					// TODO: update parent with child object and index 
+					// console.log($scope.index);
+					
+					/*console.log("child:");
+					console.log(commentForm.child);
+					console.log("parent:");
+					console.log(commentNode.comment);*/
+
+					$http.post('/api/comment', commentForm.child)
+						.success(function (data) {
+							commentForm.child = {};
+						})
+						.error(function (err) {
+							console.log("error: " + err);
+						});
 				};
 			},
 			controllerAs: 'commentCtrl'
 		};
-	});
-
-	var comment = {
-		text: 'belekm',
-		children: [
-			{ text: 'test' }
-		],
-		hasChild1: function() { return this.children[0] !== undefined; }
-	}
-
+	}]);
 })();
