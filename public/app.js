@@ -63,7 +63,7 @@
 			templateUrl: 'comment-form.html',
 			scope: { index: '=' },
 			controller: function($scope, commentNode) {
-
+				
 				this.addChild = function() {
 
 					var commentForm = this;

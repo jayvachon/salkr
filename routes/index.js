@@ -28,11 +28,31 @@ function getInitialComment (res) {
 function getCommentById (id, res) {
 
 	findComment (id, function (comment) {
-		loadChildren (comment, res);
+		loadPeripheral (comment, res);
 	});
 }
 
-function loadChildren (comment, res) {
+function applyParent (comment, callback) {
+
+	// var parent = comment.parent;
+
+	if (comment.parent === null) {
+		callback (comment);
+	} else {
+
+		var c = {};
+		c.text = comment.text;
+		c.parent = comment.parent;
+		c.children = comment.children;
+
+		findComment (comment.parent, function (parentData) {
+			c.parent = parentData;
+			callback (c);
+		});
+	}
+}
+
+function applyChildren (comment, callback) {
 
 	var children = comment.children;
 	
@@ -42,20 +62,34 @@ function loadChildren (comment, res) {
 			if (children[1] !== null) {
 				findComment (children[1], function (child2) {
 					children[1] = child2;
-					res.json(comment);
+					callback (comment);
 				});
 			} else {
-				res.json(comment);
+				callback (comment);
 			}
 		});
 	} else if (children[1] !== null) {
 		findComment (children[1], function (child) {
 			children[1] = child;
-			res.json(comment);
+			callback (comment);
 		});
 	} else {
-		res.json(comment);
+		callback (comment);
 	}
+}
+
+function loadChildren (comment, res) {
+	applyChildren (comment, function(children) {
+		res.json(children);
+	});
+}
+
+function loadPeripheral (comment, res) {
+	applyParent (comment, function (newComment) {
+		applyChildren (newComment, function (newComment2) {
+			res.json (newComment2);
+		});
+	});
 }
 
 function findComment (id, callback) {
@@ -67,7 +101,6 @@ function findComment (id, callback) {
 
 module.exports = function(app) {
 
-	// 56d344a44b750d0f6398e58d
 	app.get('/api/initialComment', function (req, res) {
 		getInitialComment(res);
 	});
@@ -105,6 +138,7 @@ module.exports = function(app) {
 	});
 
 	app.post('/api/reset', function (req, res) {
+		console.log("remove");
 		Comment.remove({}, function (err) {
 			if (err) throw err;
 			console.log("comments deleted :)");

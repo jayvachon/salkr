@@ -1,17 +1,56 @@
-<h1>TATWaD</h1>
-<h2>{{comment.text}}</h2>
-<div ng-hide="comment.children[0] === null">
-	<p>{{comment.children[0].text}}</p>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<br>
+			<h1><a href="/">~ TAtW(a)D ~</a></h1>
+			<br>
+		</div>		
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<div ng-hide="comment.parent === null">
+				<h4><a href="#comment/{{comment.parent._id}}">{{comment.parent.text}}</a></h4>
+				<p><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<div class="well well-lg">
+				<h2>{{comment.text}}</h2>
+				<p><i>- author</i></p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-6 text-center">
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+			</div>
+			<div class="panel-body">
+				<div ng-hide="comment.children[0] === null">
+					<h4><a href="#comment/{{comment.children[0]._id}}">{{comment.children[0].text}}</a></h4>
+				</div>
+				<div ng-show="comment.children[0] === null">
+					<comment-form index="$index"></comment-form>
+				</div>	
+			</div>
+		</div>
+		<div class="col-xs-6 text-center">
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+			</div>
+			<div class="panel-body">
+				<div ng-hide="comment.children[1] === null">
+					<h4><a href="#comment/{{comment.children[1]._id}}">{{comment.children[1].text}}</a></h4>
+				</div>
+				<div ng-show="comment.children[1] === null">
+					<comment-form index="$index"></comment-form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <form novalidate>
+	<button type="submit" class="btn btn-primary btn-lg" ng-click="initialCtrl.resetComments()">Reset Comments</button>
+	</form>	 -->
 </div>
-<div ng-show="comment.children[0] === null">
-	<comment-form index="0"></comment-form>
-</div>
-<div ng-hide="comment.children[1] === null">
-	<p>{{comment.children[1].text}}</p>
-</div>
-<div ng-show="comment.children[1] === null">
-	<comment-form index="1"></comment-form>
-</div>
-<form novalidate>
-<button type="submit" class="btn btn-primary btn-lg" ng-click="initialCtrl.resetComments()">Reset Comments</button>
-</form>
