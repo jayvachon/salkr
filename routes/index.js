@@ -12,7 +12,9 @@ function getInitialComment (res) {
 			Comment.create({
 				text: initial,
 				parent: null,
-				children: [null, null]
+				children: [null, null],
+				visitCount: 0,
+				author: ""
 			}, function (err, comment) {
 				if (err) res.send(err);
 
@@ -28,22 +30,29 @@ function getInitialComment (res) {
 function getCommentById (id, res) {
 
 	findComment (id, function (comment) {
-		loadPeripheral (comment, res);
+		comment.visitCount += 1;
+		console.log(comment.visitCount);
+		comment.save (function (err) {
+			if (err) throw err;
+			loadPeripheral (comment, res);
+		});
+		// loadPeripheral (comment, res);
 	});
 }
 
 function applyParent (comment, callback) {
-
-	// var parent = comment.parent;
 
 	if (comment.parent === null) {
 		callback (comment);
 	} else {
 
 		var c = {};
+		c._id = comment._id;
 		c.text = comment.text;
 		c.parent = comment.parent;
 		c.children = comment.children;
+		c.visitCount = comment.visitCount;
+		c.author = comment.author;
 
 		findComment (comment.parent, function (parentData) {
 			c.parent = parentData;
@@ -54,27 +63,33 @@ function applyParent (comment, callback) {
 
 function applyChildren (comment, callback) {
 
-	var children = comment.children;
-	
-	if (children[0] !== null) {
-		findComment (children[0], function (child1) {
-			children[0] = child1;
-			if (children[1] !== null) {
-				findComment (children[1], function (child2) {
-					children[1] = child2;
-					callback (comment);
+	var c = {};
+	c._id = comment._id;
+	c.text = comment.text;
+	c.parent = comment.parent;
+	c.children = comment.children;
+	c.visitCount = comment.visitCount;
+	c.author = comment.author;
+
+	if (comment.children[0] !== null) {
+		findComment (comment.children[0], function (child1) {
+			c.children[0] = child1;
+			if (comment.children[1] !== null) {
+				findComment (comment.children[1], function (child2) {
+					c.children[1] = child2;
+					callback (c);
 				});
 			} else {
-				callback (comment);
+				callback (c);
 			}
 		});
-	} else if (children[1] !== null) {
-		findComment (children[1], function (child) {
-			children[1] = child;
-			callback (comment);
+	} else if (comment.children[1] !== null) {
+		findComment (comment.children[1], function (child) {
+			c.children[1] = child;
+			callback (c);
 		});
 	} else {
-		callback (comment);
+		callback (c);
 	}
 }
 
@@ -120,25 +135,28 @@ module.exports = function(app) {
 			Comment.create({
 				text: req.body.text,
 				parent: comment,
-				children: [null, null]
+				children: [null, null],
+				visitCount: 0,
+				author: ""
 			}, function (err, child) {
 
 				if (err) throw err;
 
 				// Add the new comment as a child of the parent comment
+				console.log('children.' + req.body.index);
 				comment.set('children.' + req.body.index, child)
 				comment.save(function (err) {
 					if (err) throw err;
 
 					console.log("child posted :)");
+					console.log(comment);
 					loadChildren (comment, res);
 				});
 			});
 		});
 	});
 
-	app.post('/api/reset', function (req, res) {
-		console.log("remove");
+	app.get('/api/reset', function (req, res) {
 		Comment.remove({}, function (err) {
 			if (err) throw err;
 			console.log("comments deleted :)");
