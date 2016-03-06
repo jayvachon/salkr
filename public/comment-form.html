@@ -20,7 +20,7 @@
 	<!-- Post a new comment form -->
 	<div ng-hide="comment.children[index]">
 		<div class="well well-lg well-child">
-			<form ng-submit="commentCtrl.addChild()" novalidate>
+			<form name="commentForm" ng-submit="commentForm.$valid && commentCtrl.addChild()" novalidate>
 				<div class="form-group">
 					<div class="form-group">
 
@@ -37,12 +37,22 @@
 							<br>
 						</div>
 
-						<textarea type="text" class="form-control input-lg" ng-model="commentCtrl.child.text" placeholder="um?" required></textarea>
+						<div ng-show="commentForm.$submitted">
+							<span ng-show="commentForm.reaction.$error.required">Required</span>
+						</div>
+
+						<textarea type="text" class="form-control input-lg" ng-model="commentCtrl.child.text" placeholder="um?" name="reaction" required></textarea>
 						<br>
 
+						<div ng-show="commentForm.$submitted">
+							<span ng-show="commentForm.username.$error.required">Required</span>
+						</div>
+
 						<div class="input-group input-group-lg">
+							
 							<span class="input-group-addon" id="sizing-addon1">~</span>
-							<input ng-model="commentCtrl.child.author" ng-trim="false" ng-change="commentCtrl.child.author = commentCtrl.child.author.split(' ').join('')" type="text" class="form-control" placeholder="anonymous-name" aria-describedby="sizing-addon1" required>
+
+							<input ng-model="commentCtrl.child.author" ng-trim="false" ng-change="commentCtrl.child.author = commentCtrl.child.author.split(' ').join('')" name="username" type="text" class="form-control" placeholder="anonymous-name" aria-describedby="sizing-addon1" required>
 						</div>
 						<br>
 

@@ -113,3 +113,11 @@ a.child-clickthrough > .well-child:hover  {
 .btn-primary:focus {
 	background-color: #E003A3;
 }
+
+.ng-invalid.ng-dirty {
+  border-color: red;
+}
+
+.ng-valid.ng-dirty {
+  border-color: green;
+}
