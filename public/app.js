@@ -34,16 +34,6 @@
 			.error(function(err) {
 				console.log("error: " + err);
 			});
-
-		this.resetComments = function () {
-			$http.post('/api/reset', {})
-				.success(function(data) {
-					console.log("comments deleted :)");
-				})
-				.error(function (err) {
-					console.log("error: " + err);
-				});
-		};
 	}]);
 
 	app.controller('MainController', ['$scope', '$http', '$routeParams', 'commentNode', function($scope, $http, $routeParams, commentNode) {

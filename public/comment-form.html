@@ -10,8 +10,9 @@
 	<!-- Clickthrough a posted comment -->
 	<div ng-hide="comment.children[index] === null">
 		<a href="#comment/{{comment.children[index]._id}}" class="child-clickthrough">
-			<div class="well well-lg well-child">
-				<h3 class="text-center">{{comment.children[index].text}}</h3>
+			<div class="well well-lg well-child text-center">
+				<h3>{{comment.children[index].text}}</h3>
+				<div ng-include="'byline.html'"></div>
 			</div>
 		</a>
 	</div>
@@ -29,6 +30,9 @@
 							</div>
 							<div ng-show="commentCtrl.child.text">
 								<h3>{{commentCtrl.child.text}}</h3>
+								<div ng-show="commentCtrl.child.author">
+									<h4>~{{commentCtrl.child.author}}</h4>
+								</div>
 							</div>
 							<br>
 						</div>
