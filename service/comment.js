@@ -42,7 +42,13 @@ var comment = {
 		}
 
 		var loadChildren = function (data, callback) {
-			outcome.comment.populate('children', function (err, comment) {if (err) {return callback(err, null); } callback(null, 'done'); }); }
+			outcome.comment.populate('children', function (err, comment) {
+				if (err) {
+					return callback(err, null);
+				}
+				callback(null, 'done'); 
+			}); 
+		}
 
 		var asyncFinally = function (err, result) {
 			if (err) {

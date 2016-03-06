@@ -8,7 +8,7 @@
 	</div>
 
 	<!-- Clickthrough a posted comment -->
-	<div ng-hide="comment.children[index] === null">
+	<div ng-show="comment.children[index]">
 		<a href="#comment/{{comment.children[index]._id}}" class="child-clickthrough">
 			<div class="well well-lg well-child text-center">
 				<h3>{{comment.children[index].text}}</h3>
@@ -18,7 +18,7 @@
 	</div>
 
 	<!-- Post a new comment form -->
-	<div ng-show="comment.children[index] === null">
+	<div ng-hide="comment.children[index]">
 		<div class="well well-lg well-child">
 			<form ng-submit="commentCtrl.addChild()" novalidate>
 				<div class="form-group">
