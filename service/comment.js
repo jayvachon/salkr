@@ -143,7 +143,6 @@ var comment = {
 			if (err) {
 				return next(err);
 			}
-			console.log(outcome.comment);
 			res.status(200).json(outcome);
 		}
 
