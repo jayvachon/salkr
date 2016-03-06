@@ -13,6 +13,7 @@ var config = require('./config'),
 	passport = require('passport'),
 	helmet = require('helmet'),
 	csrf = require('csurf');
+	path = require('path');
 
 // create express app
 var app = module.exports = express();
@@ -70,6 +71,9 @@ require('./passport')(app, passport);
 require('./routes')(app, passport);
 
 // custom (friendly) error handler
+app.use(require('./service/http').http500);
+
+//custom (friendly) error handler
 app.use(require('./service/http').http500);
 
 // setup utilities
