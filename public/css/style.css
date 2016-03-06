@@ -3,9 +3,8 @@ body {
 	height: 100%;
 }
 
-.mv-20 {
-	margin: 20px 0;
-}
+.mv-20 { margin: 20px 0; }
+.pull-right-text { text-align: right; }
 
 /*.brand { position: absolute; }*/
 
@@ -36,6 +35,10 @@ body {
 	background-color: white;
 	border: 1px solid #FF9EFB;
 	border-radius: 20px
+}
+
+.well-child textarea {
+	border-radius: 0;
 }
 
 a.child-clickthrough .well-child {
@@ -100,5 +103,13 @@ a.child-clickthrough > .well-child:hover  {
 }
 
 .btn-primary:hover {
+	background-color: #E003A3;
+}
+
+.btn-primary:active {
+	background-color: #E003A3;
+}
+
+.btn-primary:focus {
 	background-color: #E003A3;
 }

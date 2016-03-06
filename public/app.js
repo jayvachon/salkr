@@ -28,8 +28,8 @@
 	app.controller('InitialController', ['$scope', '$http', 'commentNode', function($scope, $http, commentNode) {
 		$http.get('/api/initialComment')
 			.success(function(data) {
-				$scope.comment = data;
-				commentNode.comment = data;
+				$scope.comment = data.comment;
+				commentNode.comment = data.comment;
 			})
 			.error(function(err) {
 				console.log("error: " + err);
@@ -39,8 +39,8 @@
 	app.controller('MainController', ['$scope', '$http', '$routeParams', 'commentNode', function($scope, $http, $routeParams, commentNode) {
 		$http.get('/api/comment/' + $routeParams.commentId)
 			.success(function(data) {
-				$scope.comment = data;
-				commentNode.comment = data;
+				$scope.comment = data.comment;
+				commentNode.comment = data.comment;
 			})
 			.error(function(err) {
 				console.log("error: " + err);
@@ -53,7 +53,7 @@
 			templateUrl: 'comment-form.html',
 			scope: { 
 				index: '=',
-				comment: '=comment'
+				comment: '='
 			},
 			controller: function($scope, commentNode) {
 
