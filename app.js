@@ -24,6 +24,7 @@ app.config = config;
 // setup web server
 app.server = http.createServer(app);
 
+// setup mongoose
 app.db = mongoose.createConnection(config.mongodb.uri);
 app.db.on('error', console.error.bind(console, 'mongoose connection error: '));
 app.db.once('open', function () {
@@ -34,9 +35,10 @@ app.db.once('open', function () {
 require('./models')(app, mongoose);
 
 // settings
+app.disable('x-powered-by');
 app.set('port', config.port);
 
-//middleware
+// middleware
 app.use(require('morgan')('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -57,8 +59,12 @@ helmet(app);
 
 // response locals
 app.use(function (req, res, next) {
-	res.cookie('_csrfToken', req.csrfToken());
+
+	var token = req.csrfToken();
+	res.cookie('XSRF-TOKEN', token);
+	res.locals.csrfToken = token;
 	res.locals.user = {};
+
 	// res.locals.user.defaultReturnUrl = req.user && req.user.defaultReturnUrl();
 	// res.locals.user.username = req.user && req.user.username;
 	next();
@@ -80,6 +86,6 @@ app.use(require('./service/http').http500);
 app.utility = {};
 app.utility.workflow = require('./util/workflow');
 
-app.listen(app.config.port, function () {
+app.server.listen(app.config.port, function () {
 	console.log("App listening on port 8000");
 });
