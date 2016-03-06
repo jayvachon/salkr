@@ -76,4 +76,12 @@
 			controllerAs: 'commentCtrl'
 		};
 	}]);
+
+	app.directive ('byline', function () {
+		return {
+			restrict: 'E',
+			templateUrl: 'byline.html',
+			scope: { authorName: '@' }
+		}
+	});
 })();

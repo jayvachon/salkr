@@ -28,8 +28,7 @@
 			<div class="col-md-12 text-center">
 				<div class="well well-lg well-comment">
 					<h2>{{comment.text}}</h2>
-					<!-- <p><i>~{{comment.author}}</i></p> -->
-					<div ng-include="'byline.html'"></div>
+					<byline author-name="{{comment.author}}"></byline>
 				</div>
 			</div>
 		</div>

@@ -148,7 +148,6 @@ module.exports = function(app) {
 					if (err) throw err;
 
 					console.log("child posted :)");
-					console.log(comment);
 					loadChildren (comment, res);
 				});
 			});

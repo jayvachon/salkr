@@ -12,7 +12,7 @@
 		<a href="#comment/{{comment.children[index]._id}}" class="child-clickthrough">
 			<div class="well well-lg well-child text-center">
 				<h3>{{comment.children[index].text}}</h3>
-				<div ng-include="'byline.html'"></div>
+				<byline author-name="{{comment.children[index].author}}"></byline>
 			</div>
 		</a>
 	</div>
