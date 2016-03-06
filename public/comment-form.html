@@ -1,9 +1,51 @@
-<form novalidate>
-	<div class="form-group">
-		<div class="form-group">
-			<p>{{commentCtrl.child.text}}</p>
-			<input type="text" class="form-control input-lg text-center" ng-model="commentCtrl.child.text" required>
+<div class="col-xs-6">
+
+	<!-- Arrow -->
+	<div class="mv-20">
+		<div class="arrow-container">
+			<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 		</div>
-		<button type="submit" class="btn btn-primary btn-lg" ng-click="commentCtrl.addChild()">Submit</button>
 	</div>
-</form>
+
+	<!-- Clickthrough a posted comment -->
+	<div ng-hide="comment.children[index] === null">
+		<a href="#comment/{{comment.children[index]._id}}" class="child-clickthrough">
+			<div class="well well-lg well-child">
+				<h3 class="text-center">{{comment.children[index].text}}</h3>
+			</div>
+		</a>
+	</div>
+
+	<!-- Post a new comment form -->
+	<div ng-show="comment.children[index] === null">
+		<div class="well well-lg well-child">
+			<form novalidate>
+				<div class="form-group">
+					<div class="form-group">
+
+						<div class="text-center">
+							<div ng-hide="commentCtrl.child.text">
+								<h3>Post a reaction</h3>
+							</div>
+							<div ng-show="commentCtrl.child.text">
+								<h3>{{commentCtrl.child.text}}</h3>
+							</div>
+							<br>
+						</div>
+
+						<input type="text" class="form-control input-lg" ng-model="commentCtrl.child.text" required>
+						<br>
+
+						<div class="input-group input-group-lg">
+						  <span class="input-group-addon" id="sizing-addon1">~</span>
+						  <input ng-model="commentCtrl.child.author" ng-trim="false" ng-change="field = field.split(' ').join('')" type="text" class="form-control" placeholder="anonymous-name" aria-describedby="sizing-addon1" required>
+						  <div class="input-group-btn">
+							<button type="submit" class="btn btn-primary btn-lg" ng-click="commentCtrl.addChild()">Post</button>
+						    </div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

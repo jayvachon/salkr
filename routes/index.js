@@ -14,7 +14,7 @@ function getInitialComment (res) {
 				parent: null,
 				children: [null, null],
 				visitCount: 0,
-				author: ""
+				author: "appleslerp"
 			}, function (err, comment) {
 				if (err) res.send(err);
 
@@ -36,7 +36,6 @@ function getCommentById (id, res) {
 			if (err) throw err;
 			loadPeripheral (comment, res);
 		});
-		// loadPeripheral (comment, res);
 	});
 }
 
@@ -137,7 +136,7 @@ module.exports = function(app) {
 				parent: comment,
 				children: [null, null],
 				visitCount: 0,
-				author: ""
+				author: req.body.author
 			}, function (err, child) {
 
 				if (err) throw err;
