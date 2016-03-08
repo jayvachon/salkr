@@ -48,7 +48,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(cookieParser(config.cryptoKey));
 app.use(session({
 	resave: true,
-	saveUnitialized: true,
+	saveUninitialized: true,
 	secret: config.cryptoKey,
 	store: new mongoStore({ url: config.mongodb.uri })
 }));
@@ -77,9 +77,6 @@ require('./passport')(app, passport);
 require('./routes')(app, passport);
 
 // custom (friendly) error handler
-app.use(require('./service/http').http500);
-
-//custom (friendly) error handler
 app.use(require('./service/http').http500);
 
 // setup utilities

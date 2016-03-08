@@ -2,8 +2,12 @@
 
 	'use strict';
 
-	var app = angular.module('salkr', ['ngRoute'])
-		.config(['$routeProvider', function ($routeProvider) {
+	var app = angular.module('salkr', [
+		'ngRoute',
+		'config',
+		'login.social.twitter'
+		])
+		.config(['$routeProvider', '$httpProvider', 'XSRF_COOKIE_NAME', function ($routeProvider, $httpProvider, XSRF_COOKIE_NAME) {
 			$routeProvider
 				.when('/', {
 					templateUrl: '/views/main.html',
