@@ -63,10 +63,12 @@ app.use(function (req, res, next) {
 	var token = req.csrfToken();
 	res.cookie('XSRF-TOKEN', token);
 	res.locals.csrfToken = token;
-	res.locals.user = {};
 
-	// res.locals.user.defaultReturnUrl = req.user && req.user.defaultReturnUrl();
-	// res.locals.user.username = req.user && req.user.username;
+	// not currently doing anything
+	res.locals.user = {};
+	res.locals.user.defaultReturnUrl = req.user && req.user.defaultReturnUrl();
+	res.locals.user.username = req.user && req.user.username;
+
 	next();
 });
 

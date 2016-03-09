@@ -10,16 +10,22 @@ function useAngular (req, res, next) {
 exports = module.exports = function (app, passport) {
 
 	// API
-	app.get('/api/initialComment', comment.getInitial);
+	// ---------------------- comments ----------------------
+	app.get('/api/initial-comment', comment.getInitial);
 	app.get('/api/comment/:commentId', comment.getComment);
 	app.post('/api/child', comment.postChild);
+
+	// ---------------------- accounts ----------------------
+	app.post('/api/login', security.login);
+	app.get('/api/current-user', security.sendCurrentUser);
 	app.get('/api/login/twitter', security.loginTwitter);
 	app.get('/api/login/twitter/callback', useAngular)
 	// app.delete('/api/deleteComments', comment.deleteAll);
-	app.get('/api/deleteComments', comment.deleteAll);
+	app.get('/api/delete-comments', comment.deleteAll);
 
 	// Angular routes
 	app.get('/', useAngular);
+	app.get('/login', useAngular);
 	app.get('/login/twitter', passport.authenticate('twitter', { callbackURL: app.config.oauth.twitter.callbackURL, scope: ['email'] }));
 	app.get('/login/twitter/callback', useAngular);
 

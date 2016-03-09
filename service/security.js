@@ -1,6 +1,23 @@
 'use strict';
 
+var filterUser = function (user) {
+	if (user) {
+		return {
+
+		};
+	}
+	return null;
+};
+
 var security = {
+
+	login: function (req, res) {
+		console.log("login");
+	},
+
+	sendCurrentUser: function (req, res, next) {
+		res.status(200).json({user: filterUser(req.user)});
+	},
 
 	loginTwitter: function (req, res, next) {
 		

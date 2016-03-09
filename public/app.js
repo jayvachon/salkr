@@ -4,25 +4,44 @@
 
 	var app = angular.module('salkr', [
 		'ngRoute',
+		'security',
 		'config',
+		'login.index',
 		'login.social.twitter'
-		])
-		.config(['$routeProvider', '$httpProvider', 'XSRF_COOKIE_NAME', function ($routeProvider, $httpProvider, XSRF_COOKIE_NAME) {
-			$routeProvider
-				.when('/', {
-					templateUrl: '/views/main.html',
-					controller: 'InitialController',
-					controllerAs: 'initialCtrl'
-				})
-				.when('/comment/:commentId', {
-					templateUrl: '/views/main.html',
-					controller: 'MainController'
-				})
-				.when('/404', {
-					templateUrl: '/views/404.html'
-				})
-				.otherwise({ redirectTo: '/' });
-		}]);
+	]);
+		
+	app.config(['$httpProvider', 'XSRF_COOKIE_NAME', function($httpProvider, XSRF_COOKIE_NAME){
+		$httpProvider.defaults.xsrfCookieName = XSRF_COOKIE_NAME;
+	}]);
+
+	app.config(['$routeProvider', '$httpProvider', '$locationProvider', function ($routeProvider, $httpProvider, $locationProvider) {
+		$routeProvider
+			.when('/', {
+				templateUrl: '/views/main.html',
+				controller: 'InitialController',
+				controllerAs: 'initialCtrl'
+			})
+			.when('/comment/:commentId', {
+				templateUrl: '/views/main.html',
+				controller: 'MainController'
+			})
+			.when('/404', {
+				templateUrl: '/views/404.html'
+			})
+			.otherwise({ redirectTo: '/' });
+	}]);
+
+	app.run(['$location', '$rootScope', 'security', function($location, $rootScope, security) {
+
+		// Get the current user when the application starts
+		// (in case they are still logged in from a previous session)
+		security.requestCurrentUser();
+
+		// add a listener to $routeChangeSuccess
+		$rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+		  $rootScope.title = current.$$route && current.$$route.title? current.$$route.title: 'App running';
+		});
+	}]);
 
 	app.factory('commentNode', function () {
 		var commentNode = {};
@@ -30,7 +49,7 @@
 	});
 
 	app.controller('InitialController', ['$scope', '$http', 'commentNode', function($scope, $http, commentNode) {
-		$http.get('/api/initialComment')
+		$http.get('/api/initial-comment')
 			.success(function(data) {
 				$scope.comment = data.comment;
 				commentNode.comment = data.comment;
